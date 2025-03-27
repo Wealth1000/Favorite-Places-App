@@ -11,8 +11,15 @@ class PlaceDetails extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(title: Text(place.name)),
       backgroundColor: Theme.of(context).colorScheme.onInverseSurface,
-      body: Center(
-        child: Text(place.name, style: const TextStyle(color: Colors.white)),
+      body: Stack(
+        children: [
+          Image.file(
+            place.image,
+            fit: BoxFit.cover,
+            width: double.infinity,
+            height: double.infinity,
+          ),
+        ],
       ),
     );
   }
