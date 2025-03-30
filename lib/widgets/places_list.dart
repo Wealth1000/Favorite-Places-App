@@ -26,34 +26,44 @@ class PlacesList extends ConsumerWidget {
     return ListView.builder(
       itemCount: places.length,
       itemBuilder: (context, index) {
-        return Dismissible(
-          key: ValueKey(places[index].id),
-          onDismissed: (direction) {
-            deleteItem(places[index]);
-          },
-          background: Container(
-            color: Colors.red,
-            alignment: Alignment.centerLeft,
-            child: const Icon(Icons.delete, color: Colors.white),
-          ),
-          secondaryBackground: Container(
-            color: Colors.red,
-            alignment: Alignment.centerRight,
-            child: const Icon(Icons.delete, color: Colors.white),
-          ),
-          child: ListTile(
-            leading: CircleAvatar(
-              radius: 26,
-              backgroundImage: FileImage(places[index].image),
-            ),
-            title: Text(places[index].name),
-            onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (ctx) => PlaceDetails(place: places[index]),
-                ),
-              );
+        final place = places[index];
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Dismissible(
+            key: ValueKey(place.id),
+            onDismissed: (direction) {
+              deleteItem(place);
             },
+            background: Container(
+              color: Colors.red,
+              alignment: Alignment.centerLeft,
+              child: const Icon(Icons.delete, color: Colors.white),
+            ),
+            secondaryBackground: Container(
+              color: Colors.red,
+              alignment: Alignment.centerRight,
+              child: const Icon(Icons.delete, color: Colors.white),
+            ),
+            child: ListTile(
+              leading: CircleAvatar(
+                radius: 26,
+                backgroundImage: FileImage(place.image),
+              ),
+              title: Text(place.name),
+              subtitle: Text(
+                place.location.address,
+                style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
+              ),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (ctx) => PlaceDetails(placeId: place.id),
+                  ),
+                );
+              },
+            ),
           ),
         );
       },

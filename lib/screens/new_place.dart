@@ -5,6 +5,7 @@ import 'package:learnflutter/models/place.dart';
 import 'package:learnflutter/providers/place_provider.dart';
 import 'package:learnflutter/widgets/image_input.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:learnflutter/widgets/location_input.dart';
 
 class NewPlaceScreen extends ConsumerStatefulWidget {
   const NewPlaceScreen({super.key});
@@ -17,17 +18,18 @@ class _NewPlaceScreenState extends ConsumerState<NewPlaceScreen> {
   var _enteredName = '';
   final _formKey = GlobalKey<FormState>();
   File? _selectedImage;
+  PlaceLocation? _finalLocation;
   void _savePlace() {
     final isValid = _formKey.currentState?.validate() ?? false;
     if (isValid) {
       _formKey.currentState?.save();
-      if(_enteredName.isEmpty || _selectedImage == null){
+      if (_enteredName.isEmpty || _selectedImage == null) {
         return;
       }
       if (_enteredName.trim().isNotEmpty || _selectedImage != null) {
-        ref.read(placesProvider.notifier).addPlace(
-          Place(name: _enteredName, image: _selectedImage!)
-        );
+        ref
+            .read(placesProvider.notifier)
+            .addPlace(Place(name: _enteredName, image: _selectedImage!, location: _finalLocation!));
         Navigator.of(context).pop(); // Just pop without returning value
       }
     }
@@ -42,7 +44,7 @@ class _NewPlaceScreenState extends ConsumerState<NewPlaceScreen> {
         child: Form(
           key: _formKey,
           onChanged: () {
-            setState(() {});  // Rebuild the widget
+            setState(() {}); // Rebuild the widget
           },
           child: Column(
             children: [
@@ -73,15 +75,30 @@ class _NewPlaceScreenState extends ConsumerState<NewPlaceScreen> {
                   },
                 ),
               ),
-              const SizedBox(height: 10,),
-              ImageInput(onSelectImage: (image){
-                _selectedImage = image;
-              },),
-              const SizedBox(height: 10,),
+              const SizedBox(height: 10),
+              ImageInput(
+                onSelectImage: (image) {
+                  _selectedImage = image;
+                },
+              ),
+              const SizedBox(height: 20),
+              LocationInput(
+                onSelectLocation: (location, address) {
+                  setState(() {
+                    _finalLocation = PlaceLocation(
+                      latitude: location.latitude,
+                      longitude: location.longitude,
+                      address: address,
+                    );
+                  });
+                },
+              ),
+              const SizedBox(height: 10),
               ElevatedButton(
-                onPressed: _formKey.currentState?.validate() ?? false
-                    ? _savePlace
-                    : null,
+                onPressed:
+                    _formKey.currentState?.validate() ?? false
+                        ? _savePlace
+                        : null,
                 child: const Text("Add Place"),
               ),
             ],
