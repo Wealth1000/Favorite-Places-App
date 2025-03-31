@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:learnflutter/models/place.dart';
 import 'package:learnflutter/providers/place_provider.dart';
@@ -29,7 +28,13 @@ class _NewPlaceScreenState extends ConsumerState<NewPlaceScreen> {
       if (_enteredName.trim().isNotEmpty || _selectedImage != null) {
         ref
             .read(placesProvider.notifier)
-            .addPlace(Place(name: _enteredName, image: _selectedImage!, location: _finalLocation!));
+            .addPlace(
+              Place(
+                name: _enteredName,
+                image: _selectedImage!,
+                location: _finalLocation!,
+              ),
+            );
         Navigator.of(context).pop(); // Just pop without returning value
       }
     }
