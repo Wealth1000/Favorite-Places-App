@@ -27,42 +27,79 @@ class PlacesList extends ConsumerWidget {
       itemCount: places.length,
       itemBuilder: (context, index) {
         final place = places[index];
-        return Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Dismissible(
-            key: ValueKey(place.id),
-            onDismissed: (direction) {
-              deleteItem(place);
-            },
-            background: Container(
-              color: Colors.red,
-              alignment: Alignment.centerLeft,
-              child: const Icon(Icons.delete, color: Colors.white),
+        return Dismissible(
+          key: ValueKey(place.id),
+          background: Container(
+            color: Colors.red,
+            alignment: Alignment.centerLeft,
+            child: const Padding(
+              padding: EdgeInsets.only(left: 20),
+              child: Icon(Icons.delete, color: Colors.white),
             ),
-            secondaryBackground: Container(
-              color: Colors.red,
-              alignment: Alignment.centerRight,
-              child: const Icon(Icons.delete, color: Colors.white),
+          ),
+          secondaryBackground: Container(
+            color: Colors.red,
+            alignment: Alignment.centerRight,
+            child: const Padding(
+              padding: EdgeInsets.only(right: 20),
+              child: Icon(Icons.delete, color: Colors.white),
             ),
-            child: ListTile(
-              leading: CircleAvatar(
-                radius: 26,
-                backgroundImage: FileImage(place.image),
-              ),
-              title: Text(place.name),
-              subtitle: Text(
-                place.location.address,
-                style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                  color: Theme.of(context).colorScheme.onSurface,
+          ),
+          onDismissed: (direction) {
+            ref.read(placesProvider.notifier).deletePlace(place);
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+            child: Card(
+              elevation: 2,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+                side: BorderSide(
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.onSurface.withAlpha(51),
+                  width: 1,
                 ),
               ),
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (ctx) => PlaceDetails(placeId: place.id),
+              child: ListTile(
+                contentPadding: const EdgeInsets.symmetric(
+                  vertical: 8,
+                  horizontal: 16,
+                ),
+                leading: Hero(
+                  tag: place.id,
+                  child: CircleAvatar(
+                    radius: 28,
+                    backgroundImage: FileImage(place.image),
+                    backgroundColor: Theme.of(context).colorScheme.surface,
                   ),
-                );
-              },
+                ),
+                title: Text(
+                  place.name,
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+                subtitle: Text(
+                  place.location.address,
+                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.onSurface.withAlpha(204),
+                  ),
+                ),
+                trailing: Icon(
+                  Icons.chevron_right,
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.onSurface.withAlpha(153),
+                ),
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (ctx) => PlaceDetails(placeId: place.id),
+                    ),
+                  );
+                },
+              ),
             ),
           ),
         );

@@ -94,12 +94,12 @@ class _NewPlaceScreenState extends ConsumerState<NewPlaceScreen> {
                 },
               ),
               const SizedBox(height: 10),
-              ElevatedButton(
+              FloatingActionButton.extended(
                 onPressed:
                     _formKey.currentState?.validate() ?? false
                         ? _savePlace
                         : null,
-                child: const Text("Add Place"),
+                label: const Text("Add Place"),
               ),
             ],
           ),

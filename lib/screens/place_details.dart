@@ -30,11 +30,14 @@ class _PlaceDetailsState extends ConsumerState<PlaceDetails> {
       backgroundColor: Theme.of(context).colorScheme.onInverseSurface,
       body: Stack(
         children: [
-          Image.file(
+          Hero(
+            tag: place.id,
+            child: Image.file(
             place.image,
             fit: BoxFit.cover,
             width: double.infinity,
             height: double.infinity,
+          ),
           ),
           Positioned(
             bottom: 0,
